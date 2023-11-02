@@ -17,6 +17,8 @@ export function createPopup(popuptype, modal_title, modal_body, modal_secondary,
         }
     }else if(popuptype == "resetpassword" || popuptype == "rp"){
         forgotPassword();
+    }else if(popuptype == "maya"){
+        easter();
     }
     else{
         createPopup("error", "Pop-up", "You must provide a valid popup type.");
@@ -87,4 +89,15 @@ function forgotPassword(){
           });
     }else
         createPopup("error", "Forgot Password Pop-up", `You're not aloud to access this pop-up from "${window.location.href}".`);
+}
+
+
+function easter(){
+    var popup;
+    popup = `<div id="temporary-popup"><div class="modal fade" id="popup-modal" tabindex="-1" aria-labelledby="BrainifyPopUp" aria-hidden="true"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header"><h1 class="modal-title fs-5" id="BrainifyPopUp" style="color: #dc3545;"></h1><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body">Maya <3</div><div class="modal-footer"></div></div></div></div></div>`
+    $('body').append(popup);
+    $('#popup-modal').modal('show');
+    $('#popup-modal').on('hidden.bs.modal', function (e) {
+        $('#temporary-popup').remove();
+    });
 }
