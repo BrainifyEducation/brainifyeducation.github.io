@@ -416,11 +416,14 @@ export function sendResetPasswordEmail(){
   sendPasswordResetEmail(auth, email)
   .then(() => {
     $('#popup-modal').modal('hide').on('hidden.bs.modal', function (e) {
-      createPopup("req", "Password Reset", "A password reset email has been sent to your registered email address.", null, null)
+      createPopup("req", "Password Reset", "A password reset email has been sent to your registered email address.", null, null, '/login')
     });
   })
   .catch((error) => {
-    createPopup("error", error.code, error.message)
+    $('#popup-modal').modal('hide').on('hidden.bs.modal', function (e) {
+      createPopup("err", error.code, error.message, null, null)
     console.error(error.code, error.message)
+
+    });
   });
 }
