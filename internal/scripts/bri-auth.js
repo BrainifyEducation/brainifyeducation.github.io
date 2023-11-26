@@ -26,6 +26,7 @@ try{
   // Do nothing.
 }
 
+
 $('#firstNameInput').on('input',function(e){
   document.getElementById("firstNameInput").classList.remove("is-invalid");
 });
@@ -397,11 +398,12 @@ function emailLogin(){
   const password = document.getElementById("passwordLoginInput").value;
   signInWithEmailAndPassword(auth, email, password)
   .then((userCredential) => {
-    // Signed in 
-    const user = userCredential.user;
-    console.log(user);
-    createPopup("req", "Login Successful", `<strong>You have been logged in successfully.</strong> \n ${JSON.stringify(user, null, 4)}`, null, null)
-    // ...
+    if(auth.currentUser.emailVerified){
+      const user = userCredential.user;
+      createPopup("req", "Login Successful", `<strong>You have been logged in successfully.</strong> \n ${JSON.stringify(userCredential.user, null, 4)}`, null, null)
+    }else{
+      createPopup("rv")
+    }
   })
   .catch((error) => {
     createPopup("error", error.code, error.message)
@@ -409,8 +411,8 @@ function emailLogin(){
   });
 }
 
+
 export function sendResetPasswordEmail(){
-  console.log("test")
   const email = document.getElementById("resetPasswordEmailInput").value;
   console.log(email)
   sendPasswordResetEmail(auth, email)
