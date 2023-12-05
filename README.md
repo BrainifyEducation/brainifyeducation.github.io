@@ -23,7 +23,7 @@ Teachers will also benifit from Brainify, with a dashboard to see students progr
 Different accounts will have different permisions across the Brainify platform. Account types are split into three account types:
 * **Student, Teacher, and Development**. _**Student accounts**_ have no variations and are configured by the student on sign up.
 * _**Teacher Accounts**_ have three variations. Subject Teacher, Head of Department and SLT. These variations affect the range of students a teacher can edit.
-* _**Development Accounts**_ are not in use for the public and is used as a portal to update our questions and systems.
+* _**Development Accounts**_ are not in use for the public and is used as a portal to update our questions and monitor other systems.
 
 |  | Student | Subject Teacher | Head Of Department | SLT | Development |
 | :-: | :-: | :-: | :-: | :-: | :-: |
@@ -33,5 +33,96 @@ Different accounts will have different permisions across the Brainify platform. 
 
 
 ## Core Lessons
+Core lessons are **lessons provided by Brainify**, applicable to the exam board specifications **(currently limited to AQA)**. Core lessons can only created by 
+[development accounts](#account-types).
 
+
+## JSON Formatting
+
+```JSON
+{
+    "AQA": {
+        "topic-id": {
+            "lesson-id": {
+                "lesson-config": {},
+                "question-id": {}
+            }
+        }
+    }
+}
+```
+
+#### **_Information Pane_**
+```JSON
+{
+ "information_title": "Title",
+ "panes": [
+    {
+        "pane_title": "Title 1",
+        "pane_body": "Information that will provide context to the lesson.",
+        "media": {
+            "required": true,
+            "media_type": "image",
+            "formatting": "before-body/after-body/end",
+            "src": {
+                "type": "external/internal",
+                "src": "storage-path/url"
+            }
+        }
+    },
+    {
+        "pane_title": "Title 2",
+        "pane_body": "Information that will provide context to the lesson.",
+        "media": {
+            "required": true,
+            "media_type": "video",
+            "formatting": "before-body/after-body/end",
+            "src": {
+                "type": "external/internal",
+                "src": "storage-path/url"
+            }
+        }
+    },
+    {
+        "pane_title": "Title 3",
+        "pane_body": "Information that will provide context to the lesson.",
+        "media": {
+            "required": false,
+            "media_type": "",
+            "formatting": "",
+            "src": {
+                "type": "",
+                "src": ""
+            }
+        }
+    }
+ ]
+}
+```
+
+## **Question Types**
+#### **_Multiple Choice_**
+```JSON
+{
+    "question_type": "multiple_choice",
+    "question": {
+        "multiple_choice": {
+            "body": "This will provide the question or context to the options.",
+            "type": "slider/check",
+            "options": ["Option 0", "Option 1", "Option 2"],
+            "correct_options": [0, 2],
+        },
+        "media": {
+            "required": true,
+            "media_type": "image/video",
+            "formatting": "before-body/after-body/end",
+            "src": {
+                "type": "external/internal",
+                "src": "storage-path/url"
+            }
+        },
+        "total_marks": 2
+    }
+}
+```
 

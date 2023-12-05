@@ -157,7 +157,6 @@ function signupValuesValidation(){
     if (checkPasswordStrength(password) == true){
       return true;
     }else{
-
       return "allValuesfalse";
     };
   }else{
