@@ -27,7 +27,7 @@ Different accounts will have different permisions across the Brainify platform. 
 
 |  | Student | Subject Teacher | Head Of Department | SLT | Development |
 | :-: | :-: | :-: | :-: | :-: | :-: |
-| Complete Lessons |✅|❌|❌|❌|✅|
+| Complete Lessons |✅|❌|❌|❌|❌|
 | Create Homeworks |❌|✅ |✅|✅|✅|
 | Create Core Lessons |❌|❌|❌|❌|✅|
 
