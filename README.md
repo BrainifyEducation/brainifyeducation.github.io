@@ -100,7 +100,7 @@ Core lessons are **lessons provided by Brainify**, applicable to the exam board 
 }
 ```
 
-## **Question Types**
+### **Question Types**
 #### **_Multiple Choice_**
 ```JSON
 {
