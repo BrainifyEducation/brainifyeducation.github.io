@@ -14,14 +14,14 @@ Our plan is to make an **easy to use revision tool** that students can use to he
 
 Teachers will also benifit from Brainify, with a dashboard to see students progress, and methods to set classwork or homework.
 
-# Project Notes
+# Development Notes
 
 > **Note:** Below is for development purposes only, it documents the processes we use as well as important information about the project overall.
 
 ## Account Types
 
 Different accounts will have different permisions across the Brainify platform. Account types are split into three account types:
-* **Student, Teacher, and Development**. _**Student accounts**_ have no variations and are configured by the student on sign up.
+* _**Student Accounts**_ have no variations and are configured by the student on sign up.
 * _**Teacher Accounts**_ have three variations. Subject Teacher, Head of Department and SLT. These variations affect the range of students a teacher can edit.
 * _**Development Accounts**_ are not in use for the public and is used as a portal to update our questions and monitor other systems.
 
@@ -100,7 +100,7 @@ Core lessons are **lessons provided by Brainify**, applicable to the exam board 
 }
 ```
 
-## **Question Types**
+### **Question Types**
 #### **_Multiple Choice_**
 ```JSON
 {
