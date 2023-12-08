@@ -126,3 +126,29 @@ Core lessons are **lessons provided by Brainify**, applicable to the exam board 
 }
 ```
 
+#### **_Word Fill_**
+```JSON
+{
+    "question_type": "word_fill",
+    "question": {
+        "multiple_choice": {
+            "body": "Word fill questions will be formated differently to other questions. Answer spaces will be symbolised by _*1*_, _*2*_.",
+            "answers": [{
+                "varient_answers": ["answer1", "solution1", "responce1"]
+            }, {
+                "varient_answers": ["answer2", "solution2", "responce2"]
+            }]
+        },
+        "media": {
+            "required": false,
+            "media_type": "",
+            "formatting": "",
+            "src": {
+                "type": "",
+                "src": ""
+            }
+        },
+        "total_marks": 2                                                                                                    
+    }
+}
+```
