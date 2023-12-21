@@ -148,7 +148,7 @@ Core lessons are **lessons provided by Brainify**, applicable to the exam board 
                 "src": ""
             }
         },
-        "total_marks": 2                                                                                                    
+        "total_marks": 2             
     }
 }
 ```

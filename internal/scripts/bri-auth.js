@@ -3,9 +3,8 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebas
 import { getAuth, updateProfile, onAuthStateChanged, sendEmailVerification, signInWithPopup, OAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut, applyActionCode, verifyPasswordResetCode, confirmPasswordReset } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
 import { getDatabase, ref, set, get, child,  } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
 import { getConfig } from "./firebaseConfig.js"
-import { createPopup } from "./bri-popups.js";
-import 'https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js';
-
+import { createPopup } from "./bri-popups.js"
+import "https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js";
 const firebaseConfig = getConfig();
 
 const app = initializeApp(firebaseConfig);
@@ -53,7 +52,11 @@ $('#confirmNewPasswordInput').on('input',function(e){
     accountPasswordValidation("reset_password")
 });
 $('#passwordReset').on('click',function(e){
-  createPopup("rp")
+  forgotPassword();
+});
+
+$('#logout-button').on('click',function(e){
+  signOutAccount();
 });
 
 $('#loginButton').on('click',function(e){
@@ -67,6 +70,14 @@ $('#resetPasswordConfirmButton').on('click',function(e){
 });
 
 
+function signOutAccount(){
+  signOut(auth).then(() => {
+    window.location.href = "/";
+  }).catch((error) => {
+    createPopup("error", error.code, error.message)
+    console.error(error.code, error.message)
+  });
+};
 function accountPasswordValidation(type){
   if (type == "signup"){
     const password = document.getElementById("passwordInput").value;
@@ -410,21 +421,50 @@ function emailLogin(){
   });
 }
 
+function forgotPassword(){
+  if(window.location.href != "/login"){
+      var modal_title = "Forgot Password";
+      var modal_body = "Enter your email address below and we'll send you a link to reset your password.";
+      var modal_secondary = "Cancel";
+      var modal_primary = "Send Email";
+      var popup = `<div id="temporary-popup"> <div class="modal fade" id="popup-modal" tabindex="-1" aria-labelledby="BrainifyPopUp" aria-hidden="true"> <div class="modal-dialog modal-dialog-centered"> <div class="modal-content"> <div class="modal-header"> <h1 class="modal-title fs-5" id="BrainifyPopUp">${modal_title}</h1> <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> </div> <div class="modal-body"> <form> <p>${modal_body}</p> <hr> <div class="mb-3"> <label for="emailLoginInput" class="form-label"><strong>Email address</strong></label> <input autocomplete="email" type="email" class="form-control" id="resetPasswordEmailInput" aria-describedby="emailHelp"> </div> </form> </div> <div class="modal-footer"> <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">${modal_secondary}</button> <button type="button" id="buttonEvent" class="btn btn-primary">${modal_primary}</button> </div> </div> </div> </div> </div>`
+      $('body').append(popup);
+      $('#popup-modal').modal('show');
+      $('#popup-modal').on('hidden.bs.modal', function (e) {
+          $('#temporary-popup').remove();
+      });
+      document.getElementById("buttonEvent").addEventListener("click", function() {
+          const email = document.getElementById("resetPasswordEmailInput").value;
+          console.log(email)
+          sendPasswordResetEmail(auth, email)
+          .then(() => {
+            $('#popup-modal').modal('hide').on('hidden.bs.modal', function (e) {
+              createPopup("req", "Password Reset", "A password reset email has been sent to your registered email address.", null, null, '/login')
+            });
+          })
+          .catch((error) => {
+            $('#popup-modal').modal('hide').on('hidden.bs.modal', function (e) {
+              createPopup("err", error.code, error.message, null, null)
+              console.error(error.code, error.message)
+            
+            });
+          });
+        });
+  }else
+      createPopup("error", "Forgot Password Pop-up", `You're not aloud to access this pop-up from "${window.location.href}".`);
+}
 
-export function sendResetPasswordEmail(){
-  const email = document.getElementById("resetPasswordEmailInput").value;
-  console.log(email)
-  sendPasswordResetEmail(auth, email)
-  .then(() => {
-    $('#popup-modal').modal('hide').on('hidden.bs.modal', function (e) {
-      createPopup("req", "Password Reset", "A password reset email has been sent to your registered email address.", null, null, '/login')
-    });
-  })
-  .catch((error) => {
-    $('#popup-modal').modal('hide').on('hidden.bs.modal', function (e) {
-      createPopup("err", error.code, error.message, null, null)
-    console.error(error.code, error.message)
 
-    });
+export function initializePage(){
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      const uid = user.uid;
+      $("#dropdown-button").show();
+      $("#profile-picture").attr("src",user.photoURL);
+      $("#account-name").text(user.displayName);
+    } else {
+      console.log("No user signed in")
+      $("#account-buttons").show();
+    }
   });
 }

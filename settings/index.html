@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="UTF-8">
+        <title>Brainify</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script type="module" src="/internal/scripts/bri-auth.js"></script>
+        <link rel="stylesheet" href="/internal/css/style.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+<body class="ms-5 me-5 mt-2">
+  <script id="self-destruct" type="module">
+    console.log("Self destructing...")
+    import { initializePage } from "/internal/scripts/bri-auth.js";
+    initializePage();
+    $("#self-destruct").remove();
+  </script>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">Brainify</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Features</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Pricing</a>
+              </li>
+            </ul>
+
+          <div id="nav-button">
+              <div id="account-buttons" style="display: none;">
+                <button class="btn btn-primary" onclick="window.location.href='/login'">Login</button>
+                <button class="btn btn-secondary" onclick="window.location.href='/signup'">Signup</button>
+
+              </div>
+              <div id="dropdown-button" style="display: none;">
+                <div class="dropdown">
+                  <button class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><img src="https://ui-avatars.com/api/?name=Austin%20Harrison&background=random" alt="Profile Picture" width="25" height="25" id="profile-picture" class="rounded-circle d-inline-block align-text-top me-1"><span id="account-name"></span></button>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="/settings">Settings</a></li>
+                    <li><a class="dropdown-item text-danger" href="#" id="logout-button">Logout</a></li>
+                  </ul>
+                </div>
+              </div>
+          </div>
+        </div>
+      </nav>
+
+</body>
+</html>
