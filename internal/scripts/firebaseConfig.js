@@ -1,12 +1,11 @@
 export function getConfig(){
-  var config = {
-    "apiKey": "AIzaSyC9Ug3rur6sGiFODklQgl1pmPR80OWTFJ8",
-    "authDomain": "brainifyrevision.firebaseapp.com",
-    "databaseURL": "https://brainifyrevision-default-rtdb.europe-west1.firebasedatabase.app",
-    "projectId": "brainifyrevision",
-    "storageBucket": "brainifyrevision.appspot.com",
-    "messagingSenderId": "547884847481",
-    "appId": "1:547884847481:web:98ff5c96debeab5546dfa8"
-  }
-  return config;
+  return {
+    apiKey: "AIzaSyAgd06oWm-5S3E4H3QUohrOSKfrbBNE0ew",
+    authDomain: "brainify-education.firebaseapp.com",
+    projectId: "brainify-education",
+    storageBucket: "brainify-education.appspot.com",
+    messagingSenderId: "3309357053",
+    appId: "1:3309357053:web:f3bf0c4dad121ca5da7b94",
+    measurementId: "G-QY6S29EX3P"
+  };
 }

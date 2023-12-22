@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="/internal/css/style.css">
+    <link rel="stylesheet" href="/internal/css/style.css">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -15,8 +15,39 @@
     </style>
     <title>Brainify - Signup</title>
 </head>
-<body>
-    <form style="margin-left: 10%; margin-right: 10%; margin-top: 2%;">
+<body >
+
+      <script id="self-destruct" type="module">
+        console.log("Self destructing...")
+        import { initializePage } from "/internal/scripts/bri-auth.js";
+        initializePage();
+        $("#self-destruct").remove();
+      </script>
+<nav class="navbar navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Brainify</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarText">
+      <ul id="nav-links" class="navbar-nav me-auto mb-2 mb-lg-0"></ul>
+
+    <div id="nav-button">
+        <div id="account-buttons" style="display: none;">
+          <button class="btn btn-primary" onclick="window.location.href='/login'">Login</button>
+          <button class="btn btn-secondary" onclick="window.location.href='/signup'">Signup</button>
+
+        </div>
+        <div id="dropdown-button" style="display: none;">
+          <div class="dropdown">
+            <button class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><img src="https://ui-avatars.com/api/?name=Austin%20Harrison&background=random" alt="Profile Picture" width="25" height="25" id="profile-picture" class="rounded-circle d-inline-block align-text-top me-1"><span id="account-name"></span></button>
+            <ul id="dropdown-menu" class="dropdown-menu"></ul>
+          </div>
+        </div>
+    </div>
+  </div>
+</nav>
+          <form style="margin-left: 10%; margin-right: 10%; margin-top: 2%;">
         <h1>Sign Up - Brainify</h1>
         <div class="mb-3">
             <label autocomplete="given-name" for="firstNameInput" class="form-label">First Name</label>
@@ -41,12 +72,20 @@
             <div id="passwordFeedback" style="display: block;" class="invalid-feedback"></div>
 
           </div>
+          <div class="mb-3">
+            <p class="form-label">Account Type</p>
+            <input type="radio" class="btn-check" name="options-base" id="studentRadio" autocomplete="off">
+            <label id="studentRadioLabel" class="btn btn-success bt" for="studentRadio">Student</label>
+  
+            <input type="radio" class="btn-check" name="options-base" id="teacherRadio" autocomplete="off">
+            <label id="teacherRadioLabel" class="btn btn-success" for="teacherRadio">Teacher</label>
+          </div>
         <div class="mb-3 form-check">
           <input type="checkbox" class="form-check-input" id="tosCheck">
           <label class="form-check-label" id="tosCheckLabel" for="tosCheck">I agree to the <strong>Terms of Service</strong>.</label>
         </div>
+        
         <button type="button" id="signUpButton" class="btn btn-primary">Sign Up</button>
       </form>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 </body>
 </html>

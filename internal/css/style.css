@@ -9,3 +9,14 @@ strong{
 .navbar-brand{
     font-weight: 800;
 }
+
+#pageid{
+    display: none;
+}
+
+nav{
+    margin-left: 2rem!important;
+    margin-right: 2rem!important;
+    margin-top: 0.5rem!important;
+    margin-bottom: 0.5rem!important;
+}

@@ -5,6 +5,7 @@ const firebaseConfig = getConfig();
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 export function createPopup(popuptype, modal_title, modal_body, modal_secondary, modal_primary, continueUrl){
+    $('#temporary-popup').remove();
     if (popuptype == "requested" || popuptype == "req" || popuptype == "request"){
         if(modal_title, modal_body){
             requestedPopup(modal_title, modal_body, modal_secondary, modal_primary, continueUrl);

@@ -1,7 +1,7 @@
 // Firebase Setup.
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
 import { getAuth, updateProfile, onAuthStateChanged, sendEmailVerification, signInWithPopup, OAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut, applyActionCode, verifyPasswordResetCode, confirmPasswordReset } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
-import { getDatabase, ref, set, get, child,  } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
+import { getDatabase, ref, set, get, child} from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
 import { getConfig } from "./firebaseConfig.js"
 import { createPopup } from "./bri-popups.js"
 import "https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js";
@@ -25,50 +25,48 @@ try{
   // Do nothing.
 }
 
-
-$('#firstNameInput').on('input',function(e){
-  document.getElementById("firstNameInput").classList.remove("is-invalid");
-});
-$('#secondNameInput').on('input',function(e){
-  document.getElementById("secondNameInput").classList.remove("is-invalid");
-});
-$('#emailInput').on('input',function(e){
-  document.getElementById("emailInput").classList.remove("is-invalid");
-});
-$('#tosCheck').on('input',function(e){
-  document.getElementById("tosCheckLabel").classList.remove("errorText");
-});
-
-$('#confirmPasswordInput').on('input',function(e){
-    accountPasswordValidation("signup")
-});
-$('#passwordInput').on('input',function(e){
-    accountPasswordValidation("signup")
-});
-$('#newPasswordInput').on('input',function(e){
-    accountPasswordValidation("reset_password")
-});
-$('#confirmNewPasswordInput').on('input',function(e){
-    accountPasswordValidation("reset_password")
-});
-$('#passwordReset').on('click',function(e){
-  forgotPassword();
-});
-
-$('#logout-button').on('click',function(e){
-  signOutAccount();
-});
-
-$('#loginButton').on('click',function(e){
-  emailLogin();
-});
-$('#resetPasswordConfirmButton').on('click',function(e){
-  const queryString = window.location.search;
-  const urlParams = new URLSearchParams(queryString);
-    const actionCode = urlParams.get('oobCode')
-  handleResetPassword(auth, actionCode);
-});
-
+try{
+  $('#firstNameInput').on('input',function(e){
+    document.getElementById("firstNameInput").classList.remove("is-invalid");
+  });
+  $('#secondNameInput').on('input',function(e){
+    document.getElementById("secondNameInput").classList.remove("is-invalid");
+  });
+  $('#emailInput').on('input',function(e){
+    document.getElementById("emailInput").classList.remove("is-invalid");
+  });
+  $('#tosCheck').on('input',function(e){
+    document.getElementById("tosCheckLabel").classList.remove("errorText");
+  });
+  
+  $('#confirmPasswordInput').on('input',function(e){
+      accountPasswordValidation("signup")
+  });
+  $('#passwordInput').on('input',function(e){
+      accountPasswordValidation("signup")
+  });
+  $('#newPasswordInput').on('input',function(e){
+      accountPasswordValidation("reset_password")
+  });
+  $('#confirmNewPasswordInput').on('input',function(e){
+      accountPasswordValidation("reset_password")
+  });
+  $('#passwordReset').on('click',function(e){
+    forgotPassword();
+  });
+  
+  $('#loginButton').on('click',function(e){
+    emailLogin();
+  });
+  $('#resetPasswordConfirmButton').on('click',function(e){
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+      const actionCode = urlParams.get('oobCode')
+    handleResetPassword(auth, actionCode);
+  });
+}catch(err){
+  // Do nothing.
+}
 
 function signOutAccount(){
   signOut(auth).then(() => {
@@ -257,12 +255,17 @@ return false;
 
 
 export function emailSignupFirebase(){
+  const button = document.getElementById("signUpButton");
+  button.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
+  button.disabled = true;
     const firstName = document.getElementById("firstNameInput").value;
     const secondName = document.getElementById("secondNameInput").value;
     const email = document.getElementById("emailInput").value;
     const password = document.getElementById("passwordInput").value;
     const confirmPassword = document.getElementById("confirmPasswordInput").value;
     const tosCheck = document.getElementById("tosCheck").checked;
+    var accountType;
+
     if (signupValuesValidation() && tosCheck){
       if (password == confirmPassword){
         createUserWithEmailAndPassword(auth, email, password)
@@ -274,8 +277,18 @@ export function emailSignupFirebase(){
             displayName: firstName + " " + secondName,
             photoURL: `https://ui-avatars.com/api/?name=${firstName + "%20" + secondName}&background=random`
           }).then(() => {
-            // Profile updated!
-            // ...
+            if (document.getElementById("studentRadio").checked){
+              accountType = "student";
+            }else if (document.getElementById("teacherRadio").checked){
+              accountType = "teacher";
+            }else{
+              accountType = "error";
+            }
+            console.log(accountType)
+            set(ref(db, 'users/' + user.uid), {
+              accountType: accountType
+            })
+
           }).catch((error) => {
             console.error(error)
             createPopup("error", error.code, error.message)
@@ -294,14 +307,19 @@ export function emailSignupFirebase(){
           createPopup("error", errorCode, errorMessage)
           console.error(errorCode, errorMessage)
           // ..
+        })
+        .finally(() => {
+          button.innerHTML = 'Sign Up';
+          button.disabled = false;
         });
       }else{
         console.log("Passwords do not match")
       }
     }else{
-      document.getElementById("tosCheckLabel").classList.add("errorText");    
-
+      document.getElementById("tosCheckLabel").classList.add("errorText");
       console.log("TOS not checked")
+      button.innerHTML = 'Sign Up';
+      button.disabled = false;
     }
 }
 
@@ -404,6 +422,9 @@ function handleVerifyEmail(auth, actionCode) {
 // createPopup("", "Account Verification", "A verification email has been sent to your registered email address. <strong>Please verify your account to proceed.</strong>", null, "Okay")
 
 function emailLogin(){
+  const button = document.getElementById("loginButton");
+  button.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
+  button.disabled = true;
   const email = document.getElementById("emailLoginInput").value;
   const password = document.getElementById("passwordLoginInput").value;
   signInWithEmailAndPassword(auth, email, password)
@@ -418,6 +439,10 @@ function emailLogin(){
   .catch((error) => {
     createPopup("error", error.code, error.message)
     console.error(error.code, error.message)
+  })
+  .finally(() => {
+    button.innerHTML = 'Login';
+    button.disabled = false;
   });
 }
 
@@ -434,37 +459,80 @@ function forgotPassword(){
           $('#temporary-popup').remove();
       });
       document.getElementById("buttonEvent").addEventListener("click", function() {
-          const email = document.getElementById("resetPasswordEmailInput").value;
-          console.log(email)
-          sendPasswordResetEmail(auth, email)
+        const button = document.getElementById("buttonEvent");
+        button.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
+        button.disabled = true;
+
+        const email = document.getElementById("resetPasswordEmailInput").value;
+        console.log(email)
+        sendPasswordResetEmail(auth, email)
           .then(() => {
             $('#popup-modal').modal('hide').on('hidden.bs.modal', function (e) {
-              createPopup("req", "Password Reset", "A password reset email has been sent to your registered email address.", null, null, '/login')
+            createPopup("req", "Password Reset", "A password reset email has been sent to your registered email address.", null, null, '/login')
             });
           })
           .catch((error) => {
             $('#popup-modal').modal('hide').on('hidden.bs.modal', function (e) {
               createPopup("err", error.code, error.message, null, null)
               console.error(error.code, error.message)
-            
+
             });
+          })
+          .finally(() => {
+            button.innerHTML = 'Send Email';
+            button.disabled = false;
           });
-        });
+      });
   }else
       createPopup("error", "Forgot Password Pop-up", `You're not aloud to access this pop-up from "${window.location.href}".`);
 }
 
 
 export function initializePage(){
+  var dropdownLinks = `
+  <li><a class="dropdown-item" href="/settings">Settings</a></li>
+  <li><hr class="dropdown-divider"></li>
+  <li><a class="dropdown-item text-danger" href="#" id="logout-button">Logout</a></li>`
+  var links = `
+  <li class="nav-item">
+    <a id="home-button" class="nav-link" href="/">Home</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/dashboard">Dashboard</a>
+  </li>`
   onAuthStateChanged(auth, (user) => {
     if (user) {
       const uid = user.uid;
+      $("#account-buttons").hide();
       $("#dropdown-button").show();
       $("#profile-picture").attr("src",user.photoURL);
       $("#account-name").text(user.displayName);
+
     } else {
       console.log("No user signed in")
+      $("#dropdown-button").hide();
       $("#account-buttons").show();
     }
   });
+  $("#nav-links").append(links)
+
+  console.log($("#pageid").value)
+  if ($('meta[name="pageid"]').attr('content') == "home"){
+    $("#home-button").addClass("active");
+    $("#home-button").attr("aria-current", "page");
+  }
+
+  $("#dropdown-menu").append(dropdownLinks)
+
+  var logoutButton = document.getElementById("logout-button");
+  logoutButton.addEventListener('click', function() {
+    signOutAccount();
+    console.log("Logout button clicked")
+  });
+}
+
+
+
+export function settingsInitialize(){
+
 }
