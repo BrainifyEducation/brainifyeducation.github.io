@@ -2,6 +2,7 @@ export function getConfig(){
   return {
     apiKey: "AIzaSyAgd06oWm-5S3E4H3QUohrOSKfrbBNE0ew",
     authDomain: "brainify-education.firebaseapp.com",
+    databaseURL: "https://brainify-education-default-rtdb.europe-west1.firebasedatabase.app",
     projectId: "brainify-education",
     storageBucket: "brainify-education.appspot.com",
     messagingSenderId: "3309357053",

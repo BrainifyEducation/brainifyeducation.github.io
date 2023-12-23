@@ -534,5 +534,15 @@ export function initializePage(){
 
 
 export function settingsInitialize(){
-
-}
+  var developmentSettings = `<div class="development-container container shadow rounded-4  p-3"> <h2 class="mb-3"><strong>Development</strong></h2> <div class="text-center"> <button class="m-2 btn btn-development" onclick='window.location.href="https://github.com/BrainifyEducation/brainifyrevision.github.io?tab=readme-ov-file#development-notes"'>Documentation</button> </div> <div class="text-center"> <button class="m-2 btn btn-development" onclick="window.location.href='/settings/core_lessons'">Create Core Lesson</button> </div> </div>`
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      get(child(dbRef, `users/${user.uid}/accountType`)).then((snapshot) => {
+        if (snapshot.val() == "development"){
+          $("#settings-container").append(developmentSettings)
+        }
+      }).catch((error) => {});
+    } else {
+    }
+  })
+};

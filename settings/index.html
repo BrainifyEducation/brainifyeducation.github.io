@@ -32,34 +32,60 @@
                 <button class="btn btn-secondary" onclick="window.location.href='/signup'">Signup</button>
 
               </div>
-              <div id="dropdown-button" style="display: none;">
+              <div id="dropdown-button">
                 <div class="dropdown">
-                  <button class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><img src="https://ui-avatars.com/api/?name=Austin%20Harrison&background=random" alt="Profile Picture" width="25" height="25" id="profile-picture" class="rounded-circle d-inline-block align-text-top me-1"><span id="account-name"></span></button>
+                  <button class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><img src="https://ui-avatars.com/api/?name=&background=292929&color=fff" alt="Profile Picture" width="25" height="25" id="profile-picture" class="rounded-circle d-inline-block align-text-top me-1"><span id="account-name"><span class="placeholder-wave"><span class="placeholder col-12"></span></span></span></button>
                   <ul id="dropdown-menu" class="dropdown-menu"></ul>
                 </div>
               </div>
           </div>
         </div>
       </nav>
-
-
-      <div class="container mt-3">
+      <style>
+        .development-container {
+          color: #ff6060;
+          border: 0.3rem solid #ff6060;
+          border-color: #ff6060;
+          border-radius: 1rem;
+        }
+        .btn-development {
+          background-color: #ff6060;
+          border-color: #ff6060;
+          font-weight: bold;
+          color: white;
+        }
+        .btn-development:hover {
+          background-color: #e25555;
+          border-color: #e25555;
+          font-weight: bold;
+          color: white;
+        }
+        .settings-container {
+          border: 0.3rem solid #000000;
+          border-color: #000000;
+          border-radius: 1rem;
+        }
+      </style>
+      <div class="container mt-3" id="settings-container">
         <h1>Settings</h1>
         <hr class="mb-4">
-        <h2>Profile</h2>
-        <div class="container rounded-3">
-          <div class="form-check form-switch">
+
+        <div class="settings-container container shadow rounded-4 mb-3 p-3">
+          <h2><strong>Account</strong></h2>
+          <button class="btn btn-danger" id="passwordReset">Reset Password</button>
+          <!-- <div class="form-check form-switch">
             <label class="form-check-label" for="flexSwitchCheckChecked">Checked switch checkbox input</label>
             <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked">
+          </div> -->
           </div>
-        </div>
+
       </div>
 
 
 
         <script id="self-destruct" type="module">
-          import { initializePage } from "/internal/scripts/bri-main.js";
-          initializePage();
+          import { settingsInitialize } from "/internal/scripts/bri-auth.js";
+          settingsInitialize();
           $("#self-destruct").remove();
         </script>
 
