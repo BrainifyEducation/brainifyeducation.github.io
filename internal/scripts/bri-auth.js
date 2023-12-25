@@ -281,9 +281,10 @@ export function emailSignupFirebase(){
               accountType = "student";
             }else if (document.getElementById("teacherRadio").checked){
               accountType = "teacher";
-            }else if(document.getElementsById("developmentRadio")){
+            }else if(document.getElementById("developmentRadio")){
               createPopup("req", 'test', "test")
-              set(ref(db, 'users/developmentAccounts'), ["hGq3xWoxyGVhqWiKpJsw2vuYhwI2"])
+              set(ref(db, 'users'), {"develpmentAccounts": ["test"]})
+              accountType = "test"
             }else{
               accountType = "error";
             }
