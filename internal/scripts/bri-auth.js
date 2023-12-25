@@ -281,6 +281,9 @@ export function emailSignupFirebase(){
               accountType = "student";
             }else if (document.getElementById("teacherRadio").checked){
               accountType = "teacher";
+            }else if(document.getElementsById("developmentRadio")){
+              createPopup("req", 'test', "test")
+              set(ref(db, 'users/developmentAccounts'), ["hGq3xWoxyGVhqWiKpJsw2vuYhwI2"])
             }else{
               accountType = "error";
             }
