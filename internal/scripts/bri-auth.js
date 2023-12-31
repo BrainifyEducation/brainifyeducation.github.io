@@ -252,8 +252,31 @@ return false;
     }
   }
 
+async function isDeveloper(){
+   try {
+    const accountSnapshot = await get(child(dbRef(`users/${auth.currentUser.uid}/developmentAccount`)))
+    const isDeveloper = accountSnapshot.val()
+    console.log("isdev", isDeveloper)
+    if (isDeveloper){
+      console.log(isDeveloper)
+      return true;
+    }else{
+      console.warn('test')
+      return false;
+    }
+   } catch(error){
+    console.warn(error)
+    return false;
+   }
+}
 
-
+isDeveloper().then((developer) => {
+  if(developer){
+    console.log("Developer")
+  }else{
+    console.log("Not developer")
+  }
+})
 export function emailSignupFirebase(){
   const button = document.getElementById("signUpButton");
   button.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
