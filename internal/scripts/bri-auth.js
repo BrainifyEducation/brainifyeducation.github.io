@@ -1,7 +1,7 @@
 // Firebase Setup.
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
 import { getAuth, updateProfile, onAuthStateChanged, sendEmailVerification, signInWithPopup, OAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut, applyActionCode, verifyPasswordResetCode, confirmPasswordReset } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
-import { getDatabase, ref, set, get, child} from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
+import { getDatabase, ref, set, get, child, remove} from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
 import { getConfig } from "./firebaseConfig.js"
 import { createPopup } from "./bri-popups.js"
 import "https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js";
@@ -11,6 +11,20 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getDatabase();
 const dbRef = ref(getDatabase());
+
+function logTest(){
+  try {
+    throw new Error();
+} catch (e) {
+    // Extract the function name from the stack trace
+    const stackLines = e.stack.split('\n');
+    const callerLine = stackLines[2].trim();
+    const callerName = callerLine || 'Anonymous Function';
+
+    // Print the message to the console
+    console.log(`Test [${callerName}]`);
+}
+}
 
 try{
   document.getElementById("signUpButton").addEventListener("click", function() {
@@ -64,6 +78,15 @@ try{
       const actionCode = urlParams.get('oobCode')
     handleResetPassword(auth, actionCode);
   });
+
+  // Settings page.
+  document.getElementById("addDeveloperPermissionsButton").addEventListener("click", function() {
+    addDeveloperPermissions();
+  });
+
+  document.getElementById("removeDeveloperPermissionsButton").addEventListener("click", function() {
+    removeDeveloperPermissions();
+  });
 }catch(err){
   // Do nothing.
 }
@@ -76,6 +99,7 @@ function signOutAccount(){
     console.error(error.code, error.message)
   });
 };
+
 function accountPasswordValidation(type){
   if (type == "signup"){
     const password = document.getElementById("passwordInput").value;
@@ -154,7 +178,8 @@ function accountPasswordValidation(type){
         }
     }
   }
-}
+};
+
 function signupValuesValidation(){
   const firstName = document.getElementById("firstNameInput").value;
   const secondName = document.getElementById("secondNameInput").value;
@@ -199,7 +224,8 @@ function signupValuesValidation(){
     }
     return "errorValueFalse";
  }
-}
+};
+
 function checkPasswordStrength(password) {
     // Initialize variables
     var strength = 0;
@@ -250,33 +276,8 @@ return false;
         document.getElementById("passwordFeedback").innerHTML = "";
         return true;
     }
-  }
+};
 
-async function isDeveloper(){
-   try {
-    const accountSnapshot = await get(child(dbRef(`users/${auth.currentUser.uid}/developmentAccount`)))
-    const isDeveloper = accountSnapshot.val()
-    console.log("isdev", isDeveloper)
-    if (isDeveloper){
-      console.log(isDeveloper)
-      return true;
-    }else{
-      console.warn('test')
-      return false;
-    }
-   } catch(error){
-    console.warn(error)
-    return false;
-   }
-}
-
-isDeveloper().then((developer) => {
-  if(developer){
-    console.log("Developer")
-  }else{
-    console.log("Not developer")
-  }
-})
 export function emailSignupFirebase(){
   const button = document.getElementById("signUpButton");
   button.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
@@ -348,9 +349,7 @@ export function emailSignupFirebase(){
       button.innerHTML = 'Sign Up';
       button.disabled = false;
     }
-}
-
-
+};
 
 export function handleEndpoint(){
   const queryString = window.location.search;
@@ -384,11 +383,12 @@ export function handleEndpoint(){
         console.error("Invalid mode.")
         createPopup("error", "Invalid mode.", "The mode provided is invalid.", null, null, "/")
     }
-  };
+};
+
 function handleVerifyEmail(auth, actionCode) {
     applyActionCode(auth, actionCode).then((resp) => {
       // Email address has been verified.
-      createPopup("req", "Account Verified", "Your account has been verified. You can now sign in.", null, null)
+      createPopup("req", "Account Verified", "Your account has been verified. You can now sign in.", null, null, "login")
       // TODO: Display a confirmation message to the user.
       // You could also provide the user with a link back to the app.
   
@@ -400,8 +400,8 @@ function handleVerifyEmail(auth, actionCode) {
       // Code is invalid or expired. Ask the user to verify their email address
       // again.
     });
-  }
-  
+};
+
   function handleResetPassword(auth, actionCode){
     verifyPasswordResetCode(auth, actionCode).then((email) => {
       const accountEmail = email;
@@ -445,8 +445,7 @@ function handleVerifyEmail(auth, actionCode) {
       // again.
     });
 
-  }
-// createPopup("", "Account Verification", "A verification email has been sent to your registered email address. <strong>Please verify your account to proceed.</strong>", null, "Okay")
+};
 
 function emailLogin(){
   const button = document.getElementById("loginButton");
@@ -457,8 +456,7 @@ function emailLogin(){
   signInWithEmailAndPassword(auth, email, password)
   .then((userCredential) => {
     if(auth.currentUser.emailVerified){
-      const user = userCredential.user;
-      createPopup("req", "Login Successful", `<strong>You have been logged in successfully.</strong> \n ${JSON.stringify(userCredential.user, null, 4)}`, null, null)
+      window.location.href = "/";
     }else{
       createPopup("rv")
     }
@@ -471,7 +469,7 @@ function emailLogin(){
     button.innerHTML = 'Login';
     button.disabled = false;
   });
-}
+};
 
 function forgotPassword(){
   if(window.location.href != "/login"){
@@ -512,8 +510,7 @@ function forgotPassword(){
       });
   }else
       createPopup("error", "Forgot Password Pop-up", `You're not aloud to access this pop-up from "${window.location.href}".`);
-}
-
+};
 
 export function initializePage(){
   var dropdownLinks = `
@@ -543,7 +540,6 @@ export function initializePage(){
   });
   $("#nav-links").append(links)
 
-  console.log($("#pageid").value)
   if ($('meta[name="pageid"]').attr('content') == "home"){
     $("#home-button").addClass("active");
     $("#home-button").attr("aria-current", "page");
@@ -556,20 +552,94 @@ export function initializePage(){
     signOutAccount();
     console.log("Logout button clicked")
   });
-}
-
-
+};
 
 export function settingsInitialize(){
-  var developmentSettings = `<div class="development-container container shadow rounded-4  p-3"> <h2 class="mb-3"><strong>Development</strong></h2> <div class="text-center"> <button class="m-2 btn btn-development" onclick='window.location.href="https://github.com/BrainifyEducation/brainifyrevision.github.io?tab=readme-ov-file#development-notes"'>Documentation</button> </div> <div class="text-center"> <button class="m-2 btn btn-development" onclick="window.location.href='/settings/core_lessons'">Create Core Lesson</button> </div> </div>`
   onAuthStateChanged(auth, (user) => {
     if (user) {
       get(child(dbRef, `users/${user.uid}/accountType`)).then((snapshot) => {
-        if (snapshot.val() == "development"){
-          $("#settings-container").append(developmentSettings)
-        }
+        get(child(dbRef, `developmentAccounts/` + user.uid)).then((snapshot) => {
+          if (snapshot.val()){
+            // Development account
+            document.getElementById("development-settings").hidden = false;
+          }else{
+            // Not development account
+            if (snapshot.val() == "teacher"){
+              $("#settings-container").append(teacherSettings)
+              document.getElementById("development-settings").remove();
+            }else if (snapshot.val() == "student"){
+              $("#settings-container").append(studentSettings)
+            }else{
+              console.error("Error getting account type")
+            }    
+          }
+        }).catch((error) => {});
       }).catch((error) => {});
+    $('#footer').append(`<p class="settings-footer"><strong>UID: </strong>${user.uid}</p>`)
+    get(child(dbRef, 'about/version-id')).then((snapshot) => {
+      if (snapshot.val()){
+        $('#footer').append(`<p class="settings-footer mt-0"><strong>Version: </strong>${snapshot.val()}</p>`)
+        
+      }
+    })
     } else {
+      // window.location.href = "/login";
     }
   })
+};
+
+
+function addDeveloperPermissions(){
+  if (document.getElementById("addDeveloperPermissionsInput").value){
+    var modal_title = "Development Account";
+    var modal_body = `Are you sure you would like to add development permissions to <strong>${document.getElementById("addDeveloperPermissionsInput").value}</strong>'s account?`;
+    var modal_secondary = "No";
+    var modal_primary = "Yes";
+    createPopup("custom", `<div id="temporary-popup"><div class="modal fade" id="popup-modal" tabindex="-1" aria-labelledby="BrainifyPopUp" aria-hidden="true"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header"><h1 class="modal-title fs-5" id="BrainifyPopUp">${modal_title}</h1><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body">${modal_body}</div><div class="modal-footer"><button type="button" class="btn btn-primary" id="create-developer-confirm-yes">${modal_primary}</button><button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="create-developer-confirm-no">${modal_secondary}</button></div></div></div></div></div>`)
+    document.getElementById("create-developer-confirm-yes").addEventListener("click", function() {
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          var uid = document.getElementById("addDeveloperPermissionsInput").value;
+          get(child(dbRef, `developmentAccounts/` + uid )).then((snapshot) => {
+            if (snapshot.val()){
+              createPopup("error", "Development Account", "This account is already a development account.")
+            }else{
+              set(ref(db, 'developmentAccounts/' + uid), true).then(() => {
+                createPopup("req", "Development Account", "This account has been set as a development account.")
+              })
+            }
+          }).catch((error) => {
+            console.error(error)
+          });
+        }
+      })
+    });
+  }else{
+    createPopup("error", "Development Account", "Please enter a UID.")
+  }
+  
+};
+
+function removeDeveloperPermissions(){
+  if (document.getElementById("removeDeveloperPermissionsInput").value){
+    var modal_title = "Development Account";
+    var modal_body = `Are you sure you would like to remove <strong>${document.getElementById("addDeveloperPermissionsInput").value}</strong>'s development permissions?`;
+    var modal_secondary = "No";
+    var modal_primary = "Yes";
+    createPopup("custom", `<div id="temporary-popup"><div class="modal fade" id="popup-modal" tabindex="-1" aria-labelledby="BrainifyPopUp" aria-hidden="true"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header"><h1 class="modal-title fs-5" id="BrainifyPopUp">${modal_title}</h1><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body">${modal_body}</div><div class="modal-footer"><button type="button" class="btn btn-primary" id="remove-developer-confirm-yes">${modal_primary}</button><button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="remove-developer-confirm-no">${modal_secondary}</button></div></div></div></div></div>`)
+    document.getElementById("remove-developer-confirm-yes").addEventListener('click', function() {
+      get(child(dbRef, `developmentAccounts/${document.getElementById("removeDeveloperPermissionsInput").value}`)).then((snapshot) => {
+        if (snapshot.val()){
+          set(ref(db, `developmentAccounts/${document.getElementById("removeDeveloperPermissionsInput").value}`), "").then(() => {
+            createPopup("req", "Development Account", "This account's permissions have been removed.")
+          })
+        }else{
+          createPopup("error", "Development Account", "This account is not a development account, or dosen't exist.")
+        }
+      })
+    })
+  }else{
+    createPopup("error", "Development Account", "Please enter a UID.")
+
+  }
 };

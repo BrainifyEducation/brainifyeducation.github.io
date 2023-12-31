@@ -20,3 +20,6 @@ nav{
     margin-top: 0.5rem!important;
     margin-bottom: 0.5rem!important;
 }
+.dropdown-toggle {
+    min-width: 160px;
+}

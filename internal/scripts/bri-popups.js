@@ -5,6 +5,7 @@ const firebaseConfig = getConfig();
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 export function createPopup(popuptype, modal_title, modal_body, modal_secondary, modal_primary, continueUrl){
+    $('#popup-modal').modal('hide');
     $('#temporary-popup').remove();
     if (popuptype == "requested" || popuptype == "req" || popuptype == "request"){
         if(modal_title, modal_body){
@@ -26,6 +27,8 @@ export function createPopup(popuptype, modal_title, modal_body, modal_secondary,
         resendVerificationEmail();
     }else if(popuptype == "maya"){
         easter();
+    }else if (popuptype == "custom"){
+        customPopup(modal_title);
     }
     else{
         createPopup("error", "Pop-up", "You must provide a valid popup type.");
@@ -34,6 +37,16 @@ export function createPopup(popuptype, modal_title, modal_body, modal_secondary,
 
 }
 
+function customPopup(code){
+    $('body').append(code);
+    $('#popup-modal').modal('show');
+    $('#popup-modal').on('hidden.bs.modal', function (e) {
+        $('#temporary-popup').remove();
+        if(continueUrl){
+            window.location.href = continueUrl;
+        }
+    });
+}
 window.createPopup = createPopup;
 function requestedPopup(modal_title, modal_body, modal_secondary, modal_primary, continueUrl){
     var popup;
@@ -41,16 +54,16 @@ function requestedPopup(modal_title, modal_body, modal_secondary, modal_primary,
 
 
     if(modal_secondary && !modal_primary){
-        popup = `<div id="temporary-popup"><div class="modal fade" id="popup-modal" tabindex="-1" aria-labelledby="BrainifyPopUp" aria-hidden="true"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header"><h1 class="modal-title fs-5" id="BrainifyPopUp">${modal_title}</h1><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body">${modal_body}</div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">${modal_secondary}</button></div></div></div></div></div>`
+        popup = `<div id="temporary-popup"><div class="modal fade" id="popup-modal" tabindex="-1" aria-labelledby="BrainifyPopUp" aria-hidden="true"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header"><h1 class="modal-title fs-5" id="BrainifyPopUp">${modal_title}</h1><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body">${modal_body}</div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="modal_secondary">${modal_secondary}</button></div></div></div></div></div>`
     }
     if(modal_primary && !modal_secondary){
-        popup = `<div id="temporary-popup"><div class="modal fade" id="popup-modal" tabindex="-1" aria-labelledby="BrainifyPopUp" aria-hidden="true"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header"><h1 class="modal-title fs-5" id="BrainifyPopUp">${modal_title}</h1><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body">${modal_body}</div><div class="modal-footer"><button type="button" class="btn btn-primary">${modal_primary}</button></div></div></div></div></div>`
+        popup = `<div id="temporary-popup"><div class="modal fade" id="popup-modal" tabindex="-1" aria-labelledby="BrainifyPopUp" aria-hidden="true"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header"><h1 class="modal-title fs-5" id="BrainifyPopUp">${modal_title}</h1><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body">${modal_body}</div><div class="modal-footer"><button type="button" class="btn btn-primary" id="modal_primary">${modal_primary}</button></div></div></div></div></div>`
     }
     if(!modal_primary && !modal_secondary){
         popup = `<div id="temporary-popup"><div class="modal fade" id="popup-modal" tabindex="-1" aria-labelledby="BrainifyPopUp" aria-hidden="true"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header"><h1 class="modal-title fs-5" id="BrainifyPopUp">${modal_title}</h1><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body">${modal_body}</div><div class="modal-footer"></div></div></div></div></div>`
     }
     if(modal_primary && modal_secondary){
-        popup = `<div id="temporary-popup"><div class="modal fade" id="popup-modal" tabindex="-1" aria-labelledby="BrainifyPopUp" aria-hidden="true"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header"><h1 class="modal-title fs-5" id="BrainifyPopUp">${modal_title}</h1><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body">${modal_body}</div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">${modal_secondary}</button><button type="button" class="btn btn-primary">${modal_primary}</button></div></div></div></div></div>`
+        popup = `<div id="temporary-popup"><div class="modal fade" id="popup-modal" tabindex="-1" aria-labelledby="BrainifyPopUp" aria-hidden="true"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header"><h1 class="modal-title fs-5" id="BrainifyPopUp">${modal_title}</h1><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body">${modal_body}</div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="modal_secondary">${modal_secondary}</button><button type="button" class="btn btn-primary" id="modal_primary">${modal_primary}</button></div></div></div></div></div>`
     }
     $('body').append(popup);
     $('#popup-modal').modal('show');
@@ -79,8 +92,6 @@ function errorPopup(modal_error_title, modal_error, continueUrl){
         }
     });
 }
-
-
 
 // Popup locked to login page.
 

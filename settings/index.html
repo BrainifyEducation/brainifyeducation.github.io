@@ -11,7 +11,6 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 <body>
   <script id="self-destruct" type="module">
-    console.log("Self destructing...")
     import { initializePage } from "/internal/scripts/bri-auth.js";
     initializePage();
     $("#self-destruct").remove();
@@ -33,8 +32,8 @@
 
               </div>
               <div id="dropdown-button">
-                <div class="dropdown">
-                  <button class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><img src="https://ui-avatars.com/api/?name=&background=292929&color=fff" alt="Profile Picture" width="25" height="25" id="profile-picture" class="rounded-circle d-inline-block align-text-top me-1"><span id="account-name"><span class="placeholder-wave"><span class="placeholder col-12"></span></span></span></button>
+                <div class="dropdown nav-item">
+                  <button class="btn btn-light dropdown-toggle dropdown-button" data-bs-toggle="dropdown" aria-expanded="false"><img src="https://ui-avatars.com/api/?name=&background=292929&color=fff" alt="Profile Picture" width="25" height="25" id="profile-picture" class="rounded-circle d-inline-block align-text-top me-1"><span id="account-name"><span class="placeholder-wave"><span class="placeholder col-12"></span></span></span></button>
                   <ul id="dropdown-menu" class="dropdown-menu"></ul>
                 </div>
               </div>
@@ -43,14 +42,37 @@
       </nav>
       <style>
         .development-container {
+          text-align: center;
           color: #ff6060;
           border: 0.3rem solid #ff6060;
           border-color: #ff6060;
           border-radius: 1rem;
         }
+        .input-development{
+          border: 0.1rem solid #ff6060;
+          border-color: #ff6060;
+          background-color: #ff606007;
+        }
+        .input-development:focus{
+          border: 0.1rem solid #ff6060;
+          border-color: #ff6060;
+          background-color: #ff606018;
+        }
         .btn-development {
           background-color: #ff6060;
           border-color: #ff6060;
+          font-weight: bold;
+          color: white;
+        }
+        .btn-development-danger {
+          background-color: #cf4e4e;
+          border-color: #cf4e4e;
+          font-weight: bold;
+          color: white;
+        }
+        .btn-development-danger:hover {
+          background-color: #e25555;
+          border-color: #e25555;
           font-weight: bold;
           color: white;
         }
@@ -65,7 +87,17 @@
           border-color: #000000;
           border-radius: 1rem;
         }
+        .settings-footer{
+          margin-top: 2rem;
+          opacity: 0.5;
+          text-align: center;
+          color: #646464;
+        }
       </style>
+
+
+
+
       <div class="container mt-3" id="settings-container">
         <h1>Settings</h1>
         <hr class="mb-4">
@@ -73,13 +105,29 @@
         <div class="settings-container container shadow rounded-4 mb-3 p-3">
           <h2><strong>Account</strong></h2>
           <button class="btn btn-danger" id="passwordReset">Reset Password</button>
-          <!-- <div class="form-check form-switch">
-            <label class="form-check-label" for="flexSwitchCheckChecked">Checked switch checkbox input</label>
-            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked">
-          </div> -->
+        </div>
+
+        <div id="development-settings" class="development-container container shadow rounded-4 p-3" hidden>
+          <h2 class="mb-3"><strong>Development</strong></h2>
+          <div class="text-center">
+            <button class="m-2 btn btn-development" onclick=`window.location.href='https://github.com/BrainifyEducation/brainifyrevision.github.io?tab=readme-ov-file#development-notes'`>Documentation</button>
+            <button class="m-2 btn btn-development" onclick="window.location.href='/settings/core_lessons'">Create Core Lesson</button>
           </div>
 
+          <hr class="mb-4 border-1">
+          <p class="mt-3 mb-1"><strong>Developer Account Controls</strong></p>
+          <div class="input-group mb-3">
+            <input type="text" class="form-control input-development" placeholder="Account UID" id="addDeveloperPermissionsInput" aria-describedby="addDeveloper">
+            <button class="btn btn-development btn-outline-secondary" type="button" id="addDeveloperPermissionsButton">Add Permissions</button>
+        </div>
+        <div class="input-group mb-3">
+          <input type="text" class="form-control input-development" placeholder="Account UID" id="removeDeveloperPermissionsInput" aria-describedby="removeDeveloperAccount">
+          <button class="btn btn-development btn-outline-secondary" type="button" id="removeDeveloperPermissionsButton">Remove Permissions</button>
       </div>
+      </div>
+      </div>
+      <div id="footer"></div>
+
 
 
 
