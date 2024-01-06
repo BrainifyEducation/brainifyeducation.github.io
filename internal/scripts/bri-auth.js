@@ -471,6 +471,18 @@ function emailLogin(){
   });
 };
 
+function changeEmail(){
+  signOut(auth).then(() => {
+    var modal_title = "Development Account";
+    var modal_body = `Are you sure you would like to remove <strong>${document.getElementById("removeDeveloperPermissionsInput").value}</strong>'s development permissions?`;
+    var modal_secondary = "No";
+    var modal_primary = "Yes";
+    createPopup("custom", `<div id="temporary-popup"><div class="modal fade" id="popup-modal" tabindex="-1" aria-labelledby="BrainifyPopUp" aria-hidden="true"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header"><h1 class="modal-title fs-5" id="BrainifyPopUp">${modal_title}</h1><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body">${modal_body}</div><div class="modal-footer"><button type="button" class="btn btn-primary" id="remove-developer-confirm-yes">${modal_primary}</button><button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="remove-developer-confirm-no">${modal_secondary}</button></div></div></div></div></div>`)
+  }).catch((error) => {
+
+  })
+}
+
 function forgotPassword(){
   if(window.location.href != "/login"){
       var modal_title = "Forgot Password";
@@ -622,24 +634,66 @@ function addDeveloperPermissions(){
 
 function removeDeveloperPermissions(){
   if (document.getElementById("removeDeveloperPermissionsInput").value){
-    var modal_title = "Development Account";
-    var modal_body = `Are you sure you would like to remove <strong>${document.getElementById("addDeveloperPermissionsInput").value}</strong>'s development permissions?`;
-    var modal_secondary = "No";
-    var modal_primary = "Yes";
-    createPopup("custom", `<div id="temporary-popup"><div class="modal fade" id="popup-modal" tabindex="-1" aria-labelledby="BrainifyPopUp" aria-hidden="true"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header"><h1 class="modal-title fs-5" id="BrainifyPopUp">${modal_title}</h1><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body">${modal_body}</div><div class="modal-footer"><button type="button" class="btn btn-primary" id="remove-developer-confirm-yes">${modal_primary}</button><button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="remove-developer-confirm-no">${modal_secondary}</button></div></div></div></div></div>`)
-    document.getElementById("remove-developer-confirm-yes").addEventListener('click', function() {
-      get(child(dbRef, `developmentAccounts/${document.getElementById("removeDeveloperPermissionsInput").value}`)).then((snapshot) => {
-        if (snapshot.val()){
-          set(ref(db, `developmentAccounts/${document.getElementById("removeDeveloperPermissionsInput").value}`), "").then(() => {
+    get(child(dbRef, `developmentAccounts/${document.getElementById("removeDeveloperPermissionsInput").value}`)).then((snapshot) => {
+      if (snapshot.val()){
+        var modal_title = "Development Account";
+        var modal_body = `Are you sure you would like to remove <strong>${document.getElementById("removeDeveloperPermissionsInput").value}</strong>'s development permissions?`;
+        var modal_secondary = "No";
+        var modal_primary = "Yes";
+        createPopup("custom", `<div id="temporary-popup"><div class="modal fade" id="popup-modal" tabindex="-1" aria-labelledby="BrainifyPopUp" aria-hidden="true"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header"><h1 class="modal-title fs-5" id="BrainifyPopUp">${modal_title}</h1><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body">${modal_body}</div><div class="modal-footer"><button type="button" class="btn btn-primary" id="remove-developer-confirm-yes">${modal_primary}</button><button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="remove-developer-confirm-no">${modal_secondary}</button></div></div></div></div></div>`)
+        document.getElementById("remove-developer-confirm-yes").addEventListener('click', function() {
+          set(ref(db, `developmentAccounts/${document.getElementById("removeDeveloperPermissionsInput").value}`), null).then(() => {
             createPopup("req", "Development Account", "This account's permissions have been removed.")
           })
-        }else{
-          createPopup("error", "Development Account", "This account is not a development account, or dosen't exist.")
-        }
-      })
+        })
+      }else{
+        createPopup("error", "Development Account", "This account is not a development account, or dosen't exist.")
+      }
     })
+
   }else{
     createPopup("error", "Development Account", "Please enter a UID.")
 
   }
 };
+
+
+export function checkPageAccountElevation(pageType){
+  onAuthStateChanged(auth, (user) => {
+    if(pageType == "developer"){
+      if(user){
+        var uid = user.uid;
+        get(child(dbRef, `developmentAccounts/` + uid )).then((snapshot) => {
+          if (snapshot.val()){
+
+            console.log("isDevelopers")
+          }
+        }).catch(() => {
+
+          console.log("test")
+          get(child(dbRef, `/users/${uid}/accountType`)).then((snapshot) => {
+            if (snapshot.val() == "student"){
+                  console.log("student")
+                  // window.location.href = '/login';
+            }else if(snapshot.val() == "teacher"){
+                  console.log("teacher")
+                  // window.location.href = '/login';
+            }else{
+                  handleTamperedAccount("checkPageAccountElevation", snapshot.val(), user.uid)
+                  // window.location.href = '/login';
+                }
+              })
+        }).catch((error) => {
+          console.log(error)
+        })
+      }else {
+        window.location.href = '/login';
+      }
+    }
+  })
+}
+
+export function handleTamperedAccount(source, error_value, uid){
+  console.log("Tampered")
+  createPopup("error", "Tamper Warning", `Your account has illigal settings or values in our system, this may be an error on our behalf or might be a result of someone trying to tamper with your account. Your account has been flagged in our system. To dispute please contact: <strong> <a href='mailto:dispute@brainifyedu.com'>dispute@brainifyedu.com</a> </strong>.`, null, null, "signOut")
+}
