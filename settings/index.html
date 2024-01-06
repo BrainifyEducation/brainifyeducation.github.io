@@ -89,9 +89,9 @@
         }
         .settings-footer{
           margin-top: 2rem;
-          opacity: 0.5;
           text-align: center;
-          color: #646464;
+          color: #b1b1b1;
+          font-size: small;
         }
       </style>
 
@@ -110,7 +110,7 @@
         <div id="development-settings" class="development-container container shadow rounded-4 p-3" hidden>
           <h2 class="mb-3"><strong>Development</strong></h2>
           <div class="text-center">
-            <button class="m-2 btn btn-development" onclick=`window.location.href='https://github.com/BrainifyEducation/brainifyrevision.github.io?tab=readme-ov-file#development-notes'`>Documentation</button>
+            <button class="m-2 btn btn-development" onclick=window.location.href='https://github.com/BrainifyEducation/brainifyrevision.github.io?tab=readme-ov-file#development-notes'>Documentation</button>
             <button class="m-2 btn btn-development" onclick="window.location.href='/settings/core_lessons'">Create Core Lesson</button>
           </div>
 
@@ -127,9 +127,6 @@
       </div>
       </div>
       <div id="footer"></div>
-
-
-
 
         <script id="self-destruct" type="module">
           import { settingsInitialize } from "/internal/scripts/bri-auth.js";

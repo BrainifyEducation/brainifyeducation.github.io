@@ -70,6 +70,11 @@ function requestedPopup(modal_title, modal_body, modal_secondary, modal_primary,
     $('#popup-modal').on('hidden.bs.modal', function (e) {
         $('#temporary-popup').remove();
         if(continueUrl){
+            if(continueUrl == "signOut"){
+                signOut(auth).then(() => { 
+                    window.href.location = "/";
+                } )
+            }
             window.location.href = continueUrl;
         }
     });
@@ -88,6 +93,11 @@ function errorPopup(modal_error_title, modal_error, continueUrl){
     $('#popup-modal').on('hidden.bs.modal', function (e) {
         $('#temporary-popup').remove();
         if(continueUrl){
+            if(continueUrl == "signOut"){
+                signOut(auth).then(() => { 
+                    window.href.location = "/";
+                } )
+            }
             window.location.href = continueUrl;
         }
     });
