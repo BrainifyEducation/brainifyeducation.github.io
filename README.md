@@ -18,6 +18,47 @@ Teachers will also benifit from Brainify, with a dashboard to see students progr
 
 > **Note:** Below is for development purposes only, it documents the processes we use as well as important information about the project overall.
 
+## Code Notes
+> **Note:** This is not required but recommended for our team to make it easier.
+
+To effectivly document our code we use custom comments to make code easily readable and understandable for other developers on our team. We use an extension to make these tagged comments easily distinguishable, ['Better Commands'](https://marketplace.visualstudio.com/items?itemName=aaron-bond.better-comments). For our custom tags you will want to update the tags JSON file, for custom formatting.
+```JSON
+{
+    "tag": "-",
+    "color": "#eb34b1",
+    "strikethrough": false,
+    "underline": false,
+    "backgroundColor": "transparent",
+    "bold": true,
+    "italic": false
+},
+{
+    "tag": "--",
+    "color": "#27c451",
+    "strikethrough": false,
+    "underline": false,
+    "backgroundColor": "transparent",
+    "bold": true,
+    "italic": false
+},
+{
+    "tag": ".",
+    "color": "#c43927",
+    "strikethrough": false,
+    "underline": false,
+    "backgroundColor": "transparent",
+    "bold": true,
+    "italic": false
+},
+```
+
+### Comment uses
+| Tag | Use |
+| :-: | :-: |
+| "-"  |  Heighest tier, used to comment functions. | 
+|"__"|  Lower tier, used to comment inside funtions and similar.|
+| "."| Used to describe the function of IF, ELSE, THEN, CATCH, and SWITCH statments.|
+
 ## Account Types
 
 Different accounts will have different permisions across the Brainify platform. Account types are split into three account types:

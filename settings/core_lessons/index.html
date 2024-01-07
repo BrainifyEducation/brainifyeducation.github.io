@@ -57,71 +57,41 @@
         </div>
       </nav>
 
-
-
-
-
-
-
-
-
-
-            <style>
-                .container{
-                    width: 1000px;
-                }
-                .container.border.shadow {
-                        padding: 30px;
-                        background-color: #ffffff;
-                        border-radius: 10px;
-                        box-shadow: 0 0 80px rgba(0, 0, 0, 0.1);
-                }
-                .border {
-                        padding: 30px;
-                        background-color: #ffffff;
-                        border-radius: 10px;
-                }
-                [contenteditable="true"]:active,
-                [contenteditable="true"]:focus {
-                        outline: none;
-                }
-                h5 {
-                        color: #009eca;
-                }
-                p {
-                        font-size: 1.5rem;
-                        color: #333333;
-                        margin-bottom: 20px;
-                }
-                hr {
-                        border-top: 4px dashed #8c8b8b;
-                }
-        </style>
-
-        <div class="justify-content-center m-3">
-            <div id="main_header" class="container mb-5">
-                <h1>Core Lesson Editor</h1>
-                <!-- <div class="dropdown mt-3">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                      Question Type
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                      <li><a class="dropdown-item" href="?type=multiple_choice">Multiple Choice</a></li>
-                      <li><a class="dropdown-item" href="?type=gap_fill">Gap Fill</a></li>
-                      <li><a class="dropdown-item" href="?type=generic">Generic</a></li>
-                    </ul>
-                  </div> -->
-                  <div class="input-group mb-3">
-                    <select class="form-select" id="inputGroupSelect01">
-                      <option selected>Question Type</option>
-                      <option onclick="window.location.href = '?type=multiple_choice'" value="1">Multiple Choice</option>
-                      <option value="2">Gap Fill</option>
-                      <option value="3">Generic</option>
-                    </select>
-                  </div>
-            </div>
-        </div>
+  <div class="justify-content-center m-3 mb-5">
+    <div id="main_header" class="container w-100">
+      <h1>Core Lesson Editor</h1>
+      <div class="input-group mb-3">
+        <select class="form-select" id="inputGroupSelect01">
+          <option value="base" selected>Question Type</option>
+          <option value="multiple_choice">Multiple Choice</option>
+          <option value="gap">Gap Fill</option>
+          <option value="generic">Generic</option>
+        </select>
+      </div>
     </div>
+
+  <div id="multiple-choice-container" class="container border shadow w-100" hidden>
+
+    <div class="form-floating mb-3">
+      <input type="email" class="form-control" id="floatingInput" placeholder="">
+      <label for="floatingInput">Question</label>
+    </div>
+    <div id="multiple-choice-answers-container">
+      <div class="input-group">
+        <input id="multiple_choice_question_input_1" type="text" class="form-control" placeholder="Answer - 1" aria-label="Recipient's username with two button addons">
+        <button id="correct-identifier-1" class="btn btn-warning" type="button"><i class="bi bi-x-lg"></i></button>
+        <button id="delete-answer-1" class="btn btn-danger"  type="button"><i class="bi bi-x-circle"></i></button>
+      </div>
+      <div class="input-group mt-1">
+        <input id="multiple_choice_question_input_2" type="text" class="form-control" placeholder="Answer - 2" aria-label="Recipient's username with two button addons">
+        <button id="correct-identifier-2" class="btn btn-warning" type="button"><i class="bi bi-x-lg"></i></button>
+        <button id="delete-answer-2" class="btn btn-danger" type="button"><i class="bi bi-x-circle"></i></button>
+      </div>
+    </div>
+    <button id="new-answer-button" type="button" class="btn btn-success mt-2" ><i class="bi bi-plus-circle"></i></button>
+  </div>
+  </div>
+</div>
 
     
     </div>
