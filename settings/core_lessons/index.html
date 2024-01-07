@@ -77,13 +77,44 @@
         <button id="delete-answer-2" class="btn btn-danger" type="button"><i class="bi bi-x-circle"></i></button>
       </div>
     </div>
-    <button id="new-answer-button" type="button" class="btn btn-success mt-2" ><i class="bi bi-plus-circle"></i></button>
+    <hr>
+      <div class="d-flex justify-content-between mt-3">
+        <div>
+                <button id="new-answer-button" type="button" class="btn btn-success mt-2" ><i class="bi bi-plus-circle"></i></button>
+      <button id="add-video-multiple-choice-button" type="button" class="btn btn-danger mt-2" ><i class="bi bi-youtube"></i></button>
+
+        </div>
+
+      <div>
+        <button id="save-question-multiple-choice-button" type="button" class="btn btn-primary mt-2" ><i class="bi bi-pencil-square"></i></button>
+        <button id="edit-question-multiple-choice-json-button" type="button" class="btn btn-success mt-2" ><i class="bi bi-floppy"></i></button>
+      </div>
+      </div>
+      <div id="array-box"></div>
   </div>
   </div>
 </div>
 
-    
-    </div>
+
+<script type="module">
+  import { initializeMultiChoice } from "/internal/scripts/bri-question-manager.js";
+  var question_type = document.getElementById("inputGroupSelect01");
+
+  function hideAll() {
+    document.getElementById("multiple-choice-container").hidden = true;
+  }
+  question_type.addEventListener('change', function(event) {
+    if (question_type.value == "base") {
+      hideAll();
+    }
+    else if (question_type.value == "multiple_choice") {
+      hideAll();
+      initializeMultiChoice();
+    }
+  });
+</script>
+
+
 
 </body>
 </html>
