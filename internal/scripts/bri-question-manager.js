@@ -292,7 +292,7 @@ function addYoutubeVideo(type) {
         createPopup("req", "Add Youtube Video", `
         <label class="form-label"><strong>Youtube URL or Code</strong></label>
         <div class="input-group mb-3">
-            <input type="text" id="youtube-input" class="form-control" placeholder="https://youtube.com/... or f15jV8yGx" aria-label="Youtube URL or Code" aria-describedby="basic-addon1">
+            <input type="text" id="youtube-input" class="form-control" placeholder="https://youtube.com/... or dQw4w9WgXcQ" aria-label="Youtube URL or Code" aria-describedby="basic-addon1">
         </div>
 
 
@@ -347,14 +347,14 @@ function addYoutubeVideo(type) {
                     youtubeCode = url.slice(0, 11);
                     console.log(youtubeCode)
             }else if (url.slice(0, 8) == "youtu.be"){
-                url = url.substring(17)
+                url = url.substring(9)
                 url = url.slice(0, -4);
                 youtubeCode = url.slice(0, 11);
 
                 console.log(youtubeCode)
-            }else if(url.length == 9){
+            }else if(url.length == 9 || url.length == 11){
                 youtubeCode = url
-                console.log(embedUrl, "9")
+                console.log(youtubeCode, "9")
             }else{
                 document.getElementById("youtube-input").classList.add("is-invalid")
             }
