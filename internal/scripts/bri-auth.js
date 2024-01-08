@@ -4,13 +4,15 @@ import { getAuth, updateProfile, onAuthStateChanged, sendEmailVerification, sign
 import { getDatabase, ref, set, get, child, remove} from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
 import { getConfig } from "./firebaseConfig.js"
 import { createPopup } from "./bri-popups.js"
-import "https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js";
 const firebaseConfig = getConfig();
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getDatabase();
 const dbRef = ref(getDatabase());
+
+
+
 
 function logTest(){
   try {

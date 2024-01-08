@@ -4,11 +4,11 @@
         <meta charset="UTF-8">
         <title>Brainify</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <script type="module" src="/internal/scripts/bri-auth.js"></script>
         <link rel="stylesheet" href="/internal/css/style.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+        <script src="/internal/scripts/bri-main.js" type="module"></script>
+        <script src="/internal/scripts/bri-auth.js" type="module"></script>
 <body>
   <script id="self-destruct" type="module">
     import { initializePage } from "/internal/scripts/bri-auth.js";
@@ -110,7 +110,7 @@
         <div id="development-settings" class="development-container container shadow rounded-4 p-3" hidden>
           <h2 class="mb-3"><strong>Development</strong></h2>
           <div class="text-center">
-            <button class="m-2 btn btn-development" onclick=window.location.href='https://github.com/BrainifyEducation/brainifyrevision.github.io?tab=readme-ov-file#development-notes'>Documentation</button>
+            <button class="m-2 btn btn-development" onclick="window.open('https://github.com/BrainifyEducation/brainifyrevision.github.io?tab=readme-ov-file#development-notes/', '_blank');">Documentation</button>
             <button class="m-2 btn btn-development" onclick="window.location.href='/settings/core_lessons'">Create Core Lesson</button>
           </div>
 
