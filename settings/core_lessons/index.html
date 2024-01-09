@@ -22,6 +22,20 @@
     initializePage();
     $("#self-destruct").remove();
   </script>
+  <style>
+    a{
+      color: #ff6060;
+    }
+    h1{
+      color: #ff6060;
+    }
+    h2{
+      color: #ff6060;
+    }
+    strong{
+      color: #ff6060;
+    }
+  </style>
        <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
           <a class="navbar-brand" href="#">Brainify</a>
@@ -49,7 +63,7 @@
 
   <div class="justify-content-center m-3 mb-5">
     <div id="main_header" class="container w-100">
-      <h1>Core Lesson Editor</h1>
+      <h1><strong>Core Lesson Editor</strong></h1>
       <div class="input-group mb-3">
         <select class="form-select" id="inputGroupSelect01">
           <option value="base" selected>Question Type</option>
@@ -60,7 +74,7 @@
       </div>
     </div>
 
-  <div id="multiple-choice-container" class="container border shadow w-100">
+  <div data-bs-theme="light" id="multiple-choice-container" class="container border shadow w-100">
 
     <div class="form-floating mb-3">
       <input type="text" class="form-control" id="floatingInput" placeholder="">

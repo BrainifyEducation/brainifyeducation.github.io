@@ -158,6 +158,7 @@ Core lessons are **lessons provided by Brainify**, applicable to the exam board 
             "media_type": "image/video",
             "formatting": "before-body/after-body/end",
             "src": {
+                "youtubeCode": "The youtube video ID, if applicable.",
                 "type": "external/internal",
                 "src": "storage-path/url"
             }
@@ -185,6 +186,7 @@ Core lessons are **lessons provided by Brainify**, applicable to the exam board 
             "media_type": "",
             "formatting": "",
             "src": {
+                "youtubeCode": "",
                 "type": "",
                 "src": ""
             }

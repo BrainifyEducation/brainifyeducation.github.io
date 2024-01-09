@@ -29,9 +29,10 @@ var mcQuestion = {
         },
         "media": {
             "required": false,
-            "media_type": "i",
+            "media_type": "",
             "formatting": "",
             "src": {
+                "youtubeCode": "",
                 "type": "",
                 "src": ""
             }
@@ -63,11 +64,15 @@ document.getElementById(`multiple_choice_question_input_2`).addEventListener('in
 
 document.getElementById("new-answer-button").addEventListener('click', function() {
 create_answer()
-})
+});
 
 document.getElementById("add-video-multiple-choice-button").addEventListener('click', function(){
     addYoutubeVideo("multiple_choice")
-})
+});
+
+document.getElementById("save-question-multiple-choice-button").addEventListener('click', function(){
+    openMcQuestionJsonEditor()
+});
 
 try{
 
@@ -289,157 +294,213 @@ function addYoutubeVideo(type) {
         var embedUrl;
         var totalFromTime;
 
-        createPopup("req", "Add Youtube Video", `
-        <label class="form-label"><strong>Youtube URL or Code</strong></label>
-        <div class="input-group mb-3">
-            <input type="text" id="youtube-input" class="form-control" placeholder="https://youtube.com/... or dQw4w9WgXcQ" aria-label="Youtube URL or Code" aria-describedby="basic-addon1">
-        </div>
-
-
-        <label class="form-label"><strong>Start from</strong></label>
-        <div class="input-group mb-3">
-          <div class="input-group-text">
-            <input class="form-check-input mt-0" type="checkbox" id="youtube-enable-from-check" value="" aria-label="Start at beginning.">
-          </div>
-          <input type="number" aria-label="Minutes" placeholder="Minutes" id="youtube-from-minutes" class="form-control" disabled>
-          <input type="number" aria-label="Seconds" placeholder="Seconds" id="youtube-from-seconds" class="form-control" disabled>
-        </div>
-        <iframe id="youtube-embed-preview" width="100%" height="260px" src="" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-        <div class="input-group mt-3">
-            <select class="form-select" id="youtube-dropdown-positioning" aria-label="Where the video will be positioned in the question.">
-                <option selected>Video Position</option>
-                <option value="1">Before question body.</option>
-                <option value="2">After question body.</option>
-                <option value="3">End.</option>
-            </select>
-        </div>
-        <hr>
-        <div class="d-flex justify-content-end">
-            <button id="new-answer-button" type="button" class="btn btn-success mt-2"><i class="bi bi-floppy"></i></button>
-        </div>
-        `)
-        document.getElementById("youtube-input").addEventListener('input', function(){
-            document.getElementById("youtube-input").classList.remove("is-invalid")
-            var url = document.getElementById("youtube-input").value;
-            if (url.startsWith("https://")){
-                url = url.substring(8)
-                if(url.startsWith("www.")){
-                    console.log("www.")
-
-                    url = url.substring(4)
+        if(mcQuestion["question"]["media"]["required"]){
+            createPopup("req", "Add Youtube Video", `There is <strong>already a youtube video assosiated with this question</strong>, to change <strong>press the delete button below</strong>. <hr>                 <div class="d-flex justify-content-end">
+            <button id="remove-youtube-button" type="button" class="btn btn-danger mt-2">Remove Youtube Video</button>
+        </div>`)
+        document.getElementById("remove-youtube-button").addEventListener("click", function(){
+            mcQuestion["question"]["media"]["required"] = false;
+            mcQuestion["question"]["media"]["media_type"] = "";
+            mcQuestion["question"]["media"]["formatting"] = "";
+            mcQuestion["question"]["media"]["src"]["type"] = "";
+            mcQuestion["question"]["media"]["src"]["youtubeCode"] = "";
+            mcQuestion["question"]["media"]["src"]["src"] = "";
+            $('#popup-modal').modal('hide');
+            addYoutubeVideo("multiple_choice")
+        })
+        }else{
+            createPopup("req", "Add Youtube Video", `
+                <label class="form-label"><strong>Youtube URL or Code</strong></label>
+                <div class="input-group mb-3">
+                    <input type="text" id="youtube-input" class="form-control" placeholder="https://youtube.com/... or dQw4w9WgXcQ" aria-label="Youtube URL or Code" aria-describedby="basic-addon1">
+                </div>
+                <label class="form-label"><strong>Start from</strong></label>
+                <div class="input-group mb-3">
+                  <div class="input-group-text">
+                    <input class="form-check-input mt-0" type="checkbox" id="youtube-enable-from-check" value="" aria-label="Start at beginning.">
+                  </div>
+                  <input type="number" aria-label="Minutes" placeholder="Minutes" id="youtube-from-minutes" class="form-control" disabled>
+                  <input type="number" aria-label="Seconds" placeholder="Seconds" id="youtube-from-seconds" class="form-control" disabled>
+                </div>
+                <iframe id="youtube-embed-preview" width="100%" height="260px" src="" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                <div class="input-group mt-3">
+                    <select class="form-select" id="youtube-dropdown-positioning" aria-label="Where the video will be positioned in the question.">
+                        <option selected>Video Position</option>
+                        <option value="1">Before question body.</option>
+                        <option value="2">After question body.</option>
+                        <option value="3">End.</option>
+                    </select>
+                </div>
+                <hr>
+                <div class="d-flex justify-content-end">
+                    <button id="save-youtube-button" type="button" class="btn btn-success mt-2"><i class="bi bi-floppy"></i></button>
+                </div>
+            `)
+    
+            document.getElementById("youtube-input").addEventListener('input', function(){
+                document.getElementById("youtube-input").classList.remove("is-invalid")
+                var url = document.getElementById("youtube-input").value;
+                if (url.startsWith("https://")){
+                    url = url.substring(8)
+                    if(url.startsWith("www.")){
+                        console.log("www.")
+    
+                        url = url.substring(4)
+                    }
+                } else if(url.startsWith("http://")){
+                    console.log("http://")
+                    url = url.substring(7)
+                    if(url.startsWith("www.")){
+                        console.log("www.")
+                        url = url.substring(4)
+                    }
                 }
-            } else if(url.startsWith("http://")){
-                console.log("http://")
-                url = url.substring(7)
-                if(url.startsWith("www.")){
-                    console.log("www.")
-                    url = url.substring(4)
+    
+                if (url.startsWith("m.")){
+                    url = url.substring(2)
                 }
-            }
-
-            if (url.startsWith("m.")){
-                url = url.substring(2)
-            }
-            console.log(url.slice(0, 8))
-            if (url.slice(0, 11) == "youtube.com"){
-                    url = url.substring(20)
+                console.log(url.slice(0, 8))
+                if (url.slice(0, 11) == "youtube.com"){
+                        url = url.substring(20)
+                        url = url.slice(0, -4);
+                        youtubeCode = url.slice(0, 11);
+                        console.log(youtubeCode)
+                }else if (url.slice(0, 8) == "youtu.be"){
+                    url = url.substring(9)
                     url = url.slice(0, -4);
                     youtubeCode = url.slice(0, 11);
+    
                     console.log(youtubeCode)
-            }else if (url.slice(0, 8) == "youtu.be"){
-                url = url.substring(9)
-                url = url.slice(0, -4);
-                youtubeCode = url.slice(0, 11);
-
-                console.log(youtubeCode)
-            }else if(url.length == 9 || url.length == 11){
-                youtubeCode = url
-                console.log(youtubeCode, "9")
-            }else{
-                document.getElementById("youtube-input").classList.add("is-invalid")
-            }
-            
-            if(youtubeCode && totalFromTime){
-                embedUrl = `https://youtube.com/embed/${youtubeCode}?controls=1&amp;start=${totalFromTime}`
-                document.getElementById("youtube-embed-preview").setAttribute("src", embedUrl)
-            }else if(youtubeCode){
-                embedUrl = `https://youtube.com/embed/${youtubeCode}?controls=1`
-                document.getElementById("youtube-embed-preview").setAttribute("src", embedUrl)
-            }
-
-            // https://www.youtube.com/embed/VxxPCxXkDQc?controls=1&amp;start=
-        })
-        document.getElementById("youtube-enable-from-check").addEventListener('change', function() {
-            console.log("test");
-            var checkbox = document.getElementById("youtube-enable-from-check");
-            var secondsInput = document.getElementById("youtube-from-seconds");
-            var minutesInput = document.getElementById("youtube-from-minutes");
-        
-            if (checkbox) {
-                if (checkbox.checked) {
-                    secondsInput.disabled = false;
-                    minutesInput.disabled = false;
-                } else {
-                    secondsInput.disabled = true;
-                    minutesInput.disabled = true;
+                }else if(url.length == 9 || url.length == 11){
+                    youtubeCode = url
+                    console.log(youtubeCode, "9")
+                }else{
+                    document.getElementById("youtube-input").classList.add("is-invalid")
                 }
-            } else {
-                console.error("Checkbox not found.");
+                
+                if(youtubeCode && totalFromTime){
+                    embedUrl = `https://youtube.com/embed/${youtubeCode}?controls=1&amp;start=${totalFromTime}`
+                    document.getElementById("youtube-embed-preview").setAttribute("src", embedUrl)
+                }else if(youtubeCode){
+                    embedUrl = `https://youtube.com/embed/${youtubeCode}?controls=1`
+                    document.getElementById("youtube-embed-preview").setAttribute("src", embedUrl)
+                }
+    
+                // https://www.youtube.com/embed/VxxPCxXkDQc?controls=1&amp;start=
+            })
+            document.getElementById("youtube-enable-from-check").addEventListener('change', function() {
+                console.log("test");
+                var checkbox = document.getElementById("youtube-enable-from-check");
+                var secondsInput = document.getElementById("youtube-from-seconds");
+                var minutesInput = document.getElementById("youtube-from-minutes");
+            
+                if (checkbox) {
+                    if (checkbox.checked) {
+                        secondsInput.disabled = false;
+                        minutesInput.disabled = false;
+                    } else {
+                        secondsInput.disabled = true;
+                        minutesInput.disabled = true;
+                    }
+                } else {
+                    console.error("Checkbox not found.");
+                }
+            });
+    
+            document.getElementById("youtube-from-seconds").addEventListener('input', function(){
+                document.getElementById("youtube-from-seconds").classList.remove("is-invalid");
+                document.getElementById("youtube-from-minutes").classList.remove("is-invalid");
+                if(this.value && document.getElementById("youtube-from-minutes").value){
+                    totalFromTime = parseInt(this.value) + (parseInt(document.getElementById("youtube-from-minutes").value) * 60)
+                    console.log(totalFromTime)
+                    if(youtubeCode && totalFromTime){
+                        console.log("testtest")
+    
+                        embedUrl = `https://youtube.com/embed/${youtubeCode}?controls=1&amp;start=${totalFromTime}`
+                        document.getElementById("youtube-embed-preview").setAttribute("src", embedUrl)
+                    }else if(youtubeCode){
+                        embedUrl = `https://youtube.com/embed/${youtubeCode}?controls=1`
+                        document.getElementById("youtube-embed-preview").setAttribute("src", embedUrl)
+                    }else if(totalFromTime){
+                        document.getElementById("youtube-input").classList.add("is-invalid")
+                    }
+                }else if (this.value && !document.getElementById("youtube-from-minutes").value){
+                    document.getElementById("youtube-from-minutes").classList.add("is-invalid");
+    
+                }else if (!this.value && document.getElementById("youtube-from-minutes").value){
+                    document.getElementById("youtube-from-seconds").classList.add("is-invalid");
+                }else{
+                    document.getElementById("youtube-from-seconds").classList.add("is-invalid");
+                    document.getElementById("youtube-from-minutes").classList.add("is-invalid");
+                }
+            })
+            document.getElementById("youtube-from-minutes").addEventListener('input', function(){
+                document.getElementById("youtube-from-seconds").classList.remove("is-invalid");
+                document.getElementById("youtube-from-minutes").classList.remove("is-invalid");
+                var totalFromTime;
+                if(this.value && document.getElementById("youtube-from-seconds").value){
+                    totalFromTime = parseInt(this.value) + (parseInt(document.getElementById("youtube-from-minutes").value) * 60)
+                    if(youtubeCode && totalFromTime){
+                        console.log("testtest")
+                        embedUrl = `https://youtube.com/embed/${youtubeCode}?controls=1&amp;start=${totalFromTime}`
+                        document.getElementById("youtube-embed-preview").setAttribute("src", embedUrl)
+                    }else if(youtubeCode){
+                        embedUrl = `https://youtube.com/embed/${youtubeCode}?controls=1`
+                        document.getElementById("youtube-embed-preview").setAttribute("src", embedUrl)
+                    }else if(totalFromTime){
+                        document.getElementById("youtube-input").classList.add("is-invalid")
+                    }
+    
+                }else if(this.value && !document.getElementById("youtube-from-seconds").value){
+                    document.getElementById("youtube-from-seconds").classList.add("is-invalid");
+                }else if (!this.value && document.getElementById("youtube-from-seconds").value){
+                    document.getElementById("youtube-from-seconds").classList.add("is-invalid");
+                }else{
+                    document.getElementById("youtube-from-seconds").classList.add("is-invalid");
+                    document.getElementById("youtube-from-minutes").classList.add("is-invalid");
+                }
+            })
+        }
+    
+        document.getElementById("save-youtube-button").addEventListener('click', function(){
+            const positioning_value = document.getElementById("youtube-dropdown-positioning").value;
+            if(embedUrl){
+                mcQuestion["question"]["media"]["required"] = true;
+                mcQuestion["question"]["media"]["media_type"] = "video";
+                if(positioning_value == 1){
+                    mcQuestion["question"]["media"]["formatting"] = "before-body";
+                }else if (positioning_value == 2){
+                    mcQuestion["question"]["media"]["formatting"] = "after-body";
+                }else if(positioning_value == 3){
+                    mcQuestion["question"]["media"]["formatting"] = "end";
+                }
+                mcQuestion["question"]["media"]["src"]["type"] = "external";
+                mcQuestion["question"]["media"]["src"]["youtubeCode"] = youtubeCode;
+                mcQuestion["question"]["media"]["src"]["src"] = embedUrl;
+                $('#popup-modal').modal('hide');
             }
         });
+        }
+}
 
-        document.getElementById("youtube-from-seconds").addEventListener('input', function(){
-            document.getElementById("youtube-from-seconds").classList.remove("is-invalid");
-            document.getElementById("youtube-from-minutes").classList.remove("is-invalid");
-            if(this.value && document.getElementById("youtube-from-minutes").value){
-                totalFromTime = parseInt(this.value) + (parseInt(document.getElementById("youtube-from-minutes").value) * 60)
-                console.log(totalFromTime)
-                if(youtubeCode && totalFromTime){
-                    console.log("testtest")
+function openMcQuestionJsonEditor(){
+    createPopup("req", "Advanced - Question Editor", `
+    <div class="form-floating">
+        <textarea class="form-control" placeholder="Question JSON" id="question-editor-textarea" style="height: 600px"></textarea>
+        <div class="d-flex justify-content-end">
+            <button id="save-mc-json" type="button" class="btn btn-success mt-2"><i class="bi bi-floppy"></i></button>
+        </div>
+    </div>
+    `)
+    document.getElementById("question-editor-textarea").innerHTML = JSON.stringify(mcQuestion, null, 4)
 
-                    embedUrl = `https://youtube.com/embed/${youtubeCode}?controls=1&amp;start=${totalFromTime}`
-                    document.getElementById("youtube-embed-preview").setAttribute("src", embedUrl)
-                }else if(youtubeCode){
-                    embedUrl = `https://youtube.com/embed/${youtubeCode}?controls=1`
-                    document.getElementById("youtube-embed-preview").setAttribute("src", embedUrl)
-                }else if(totalFromTime){
-                    document.getElementById("youtube-input").classList.add("is-invalid")
-                }
-            }else if (this.value && !document.getElementById("youtube-from-minutes").value){
-                document.getElementById("youtube-from-minutes").classList.add("is-invalid");
-
-            }else if (!this.value && document.getElementById("youtube-from-minutes").value){
-                document.getElementById("youtube-from-seconds").classList.add("is-invalid");
-            }else{
-                document.getElementById("youtube-from-seconds").classList.add("is-invalid");
-                document.getElementById("youtube-from-minutes").classList.add("is-invalid");
-            }
-        })
-        document.getElementById("youtube-from-minutes").addEventListener('input', function(){
-            document.getElementById("youtube-from-seconds").classList.remove("is-invalid");
-            document.getElementById("youtube-from-minutes").classList.remove("is-invalid");
-            var totalFromTime;
-            if(this.value && document.getElementById("youtube-from-seconds").value){
-                totalFromTime = parseInt(this.value) + (parseInt(document.getElementById("youtube-from-minutes").value) * 60)
-                if(youtubeCode && totalFromTime){
-                    console.log("testtest")
-                    embedUrl = `https://youtube.com/embed/${youtubeCode}?controls=1&amp;start=${totalFromTime}`
-                    document.getElementById("youtube-embed-preview").setAttribute("src", embedUrl)
-                }else if(youtubeCode){
-                    embedUrl = `https://youtube.com/embed/${youtubeCode}?controls=1`
-                    document.getElementById("youtube-embed-preview").setAttribute("src", embedUrl)
-                }else if(totalFromTime){
-                    document.getElementById("youtube-input").classList.add("is-invalid")
-                }
-
-            }else if(this.value && !document.getElementById("youtube-from-seconds").value){
-                document.getElementById("youtube-from-seconds").classList.add("is-invalid");
-            }else if (!this.value && document.getElementById("youtube-from-seconds").value){
-                document.getElementById("youtube-from-seconds").classList.add("is-invalid");
-            }else{
-                document.getElementById("youtube-from-seconds").classList.add("is-invalid");
-                document.getElementById("youtube-from-minutes").classList.add("is-invalid");
-            }
-        })
-    }
+    document.getElementById("save-mc-json").addEventListener("click", function(){
+        try{
+            mcQuestion = JSON.parse(document.getElementById("question-editor-textarea").value)
+            console.log(mcQuestion)
+            $('#popup-modal').modal('hide');
+        } catch(error){
+            
+        }
+    })
 }
