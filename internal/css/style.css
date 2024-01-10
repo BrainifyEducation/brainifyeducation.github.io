@@ -29,7 +29,7 @@ nav{
     min-width: 160px;
 }
 .container{
-    width: 1000px;
+    width: 100%;
 }
 .container.border.shadow {
         padding: 30px;
