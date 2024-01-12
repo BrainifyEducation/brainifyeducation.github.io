@@ -1,6 +1,6 @@
 # Brainify
 
-> **Note:** This project is still in planning and development. These are our ambitions, **we are students and also have school to work on!**
+> **Note:** This project is still in planning and development. These are our ambitions, **we are students and also have school to work on!** Parts of this documenation is hypothetical with the plan to implament it, all sections of this documentation is subject to change.
 
 **Brainify** is an under development project, our idea is to make a **clean and reliable** revision tool that students can use to further their understanding of a subject.
 
